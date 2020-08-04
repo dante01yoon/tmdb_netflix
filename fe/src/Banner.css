@@ -1,0 +1,42 @@
+.banner {
+  color: white;
+  object-fit: contain;
+  height: 448px;
+}
+
+.banner__contents {
+  margin-left:30px;
+  padding-top: 140px;
+  height: 190px;
+}
+
+.banner__title{
+  font-size: 3rem;
+  font-weight: 800;
+  padding-bottom: 0.3rem;
+}
+
+.banner__description {
+  width: 45rem;
+  line-height: 1.3;
+  padding-top: 1rem;
+  font-size: 0.8rem;
+}
+
+.banner__button {
+  cursor: pointer;
+  padding:0.3rem 1.4rem;
+  border: 0;
+  border-radius: 4px;
+  opacity:1;
+  appearance: none;
+  margin-right: 0.5rem;
+}
+
+.banner__button:hover {
+  opacity:0.8;
+}
+
+.button__list{
+  background: rgba(109,109,110,0.4);
+}
