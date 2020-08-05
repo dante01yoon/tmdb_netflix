@@ -1,3 +1,4 @@
+
 .nav__container{
   box-sizing:border-box;
   display: flex;
@@ -22,13 +23,21 @@
 }
 
 .nav__list {
+  display:table-cell;
   height:100%;
-  line-height:32px;
 }
 
 .nav__list__item {
+  vertical-align: middle;
   cursor:pointer;
   display: inline-block;
   margin-right: 8px;
-  font-weight:500;
+  font-weight: 500;
+}
+.nav__list__item .nav__search__box{
+  margin-top: 5px;
+}
+.nav__list__item .nav__search__img{
+  width: 20px;
+  height: 20px;
 }
