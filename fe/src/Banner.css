@@ -35,8 +35,19 @@
 
 .banner__button:hover {
   opacity:0.8;
+  transition: all 0.2s;
 }
 
 .button__list{
   background: rgba(109,109,110,0.4);
+}
+
+.banner__fadeBottom {
+  height:7.4rem;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(37,37,37,0.61),
+    rgba(109,109,110,0.4)
+  );
 }
