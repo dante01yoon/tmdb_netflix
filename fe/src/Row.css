@@ -1,4 +1,15 @@
+.row{
+  z-index:3;
+  position:relative;
+}
+
+.row__title{
+  font-size: 1.1vw;
+  padding-left: 20px;
+}
+
 .row__posters{
+  position:relative;
   display: flex;
   overflow-y:hidden;
   overflow-x: scroll;
