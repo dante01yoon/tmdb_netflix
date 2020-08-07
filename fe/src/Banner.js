@@ -19,13 +19,15 @@ const Banner = ({}) => {
     return str?.length > n ? str.substr(0,n-1) + "..." : str; 
   }
   return(
-    <header className="banner"
-      style={{
-        backgroundImage: `url('https://image.tmdb.org/t/p/original${movie?.backdrop_path}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center center"
-      }}
-    >
+    <header className="banner"> 
+      <div className="banner__image__wrapper">
+        <div 
+          className="banner__image"
+          style={{
+            background: `url('https://image.tmdb.org/t/p/original${movie?.backdrop_path}') center/100% no-repeat`,
+          }}
+        /> 
+      </div>
       <div className="banner__contents">
         <h1 className="banner__title">
           {movie?.title || movie?.name || movie?.original_name}
