@@ -1,21 +1,29 @@
 import React from "react";
-import "./App.css";
-import Row from "./Row";
+import requests from "./request";
+
 import Banner from "./Banner";
 import Nav from "./Nav";
+import Row from "./Row";
+import Swiper from "./Swiper";
+import SwiperWindow from "./SwiperWindow";
 
-import requests from "./request";
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <Nav/> 
-      <Banner/>
-      <Row
-        title="NETFLIX ORIGINALS"
-        fetchUrl={requests.fetchNetflixOriginals}
-        isLargeRow={true}
-      />
+      <Nav />
+      <Banner />
+      <SwiperWindow>
+        <Swiper>
+          <Row
+            title="NETFLIX ORIGINALS"
+            fetchUrl={requests.fetchNetflixOriginals}
+            isLargeRow={true}
+            scroll={false}
+          />
+        </Swiper>
+      </SwiperWindow>
       <Row title="Trending Now" fetchUrl={requests.fetchTrending} />
       <Row title="Top Rated" fetchUrl={requests.fetchTopRated} />
       <Row title="Action Movies" fetchUrl={requests.fetchActionMovies} />

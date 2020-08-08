@@ -1,35 +1,32 @@
-.row{
-  z-index:3;
-  position:relative;
+.row {
+  z-index: 3;
+  position: relative;
 }
 
-.row__title{
+.row__title {
   font-size: 1.1vw;
   padding-left: 20px;
 }
 
-.row__posters{
-  position:relative;
+.row__posters {
+  position: relative;
   display: flex;
-  overflow-y:hidden;
-  overflow-x: scroll;
+  overflow-y: hidden;
   padding: 20px;
 }
 
-.row__posters::-webkit-scrollbar{
+.row__posters::-webkit-scrollbar {
   display: none;
 }
 
-.row__poster{
-  object-fit:contain;
+.row__poster {
+  object-fit: contain;
   width: 100%;
   max-width: 200px;
   margin-right: 10px;
   transition: transform 450ms;
-
 }
 
 .row__poster:hover {
   transform: scale(1.08);
-  
 }
