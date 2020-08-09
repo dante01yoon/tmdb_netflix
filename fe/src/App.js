@@ -16,14 +16,12 @@ function App() {
       <Banner />
       <SwiperWindow>
         <Swiper>
-          { props => {
-            return(<Row
-              title="NETFLIX ORIGINALS"
-              fetchUrl={requests.fetchNetflixOriginals}
-              isLargeRow={true}
-              scroll={false}
-            />)}
-          }
+          <Row
+            title="NETFLIX ORIGINALS"
+            fetchUrl={requests.fetchNetflixOriginals}
+            isLargeRow={true}
+            scroll={false}
+          />
         </Swiper>
       </SwiperWindow>
       <Row title="Trending Now" fetchUrl={requests.fetchTrending} />

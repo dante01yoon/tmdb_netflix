@@ -26,7 +26,6 @@ const Row = ({ title, fetchUrl, isLargeRow = false, scroll = true }) => {
     },
   };
   const handleClick = (movie) => {
-    console.log(movie);
     if (trailerUrl) {
       setTrailerUrl("");
     } else {
