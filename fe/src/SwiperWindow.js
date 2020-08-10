@@ -60,10 +60,11 @@ const SwiperWindow = ({ children }) => {
 
   const onPointerDownHandler = (e) => {
     setRealTimePointerRef({ location: e.clientX });
+    console.log('onPointerDownHandler: ', realTimePointerRef.current);
   };
 
   const onPointerUpHandler = (e) => {
-    console.log(e);
+    console.log('onPointerUpHandler: ', realTimePointerRef.current);
   };
   return (
     <div
