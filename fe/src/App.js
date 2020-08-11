@@ -14,16 +14,12 @@ function App() {
     <div className="App">
       <Nav />
       <Banner />
-      <SwiperWindow>
-        <Swiper>
-          <Row
-            title="NETFLIX ORIGINALS"
-            fetchUrl={requests.fetchNetflixOriginals}
-            isLargeRow={true}
-            scroll={false}
-          />
-        </Swiper>
-      </SwiperWindow>
+      <Row
+        title="NETFLIX ORIGINALS"
+        fetchUrl={requests.fetchNetflixOriginals}
+        isLargeRow={true}
+        scroll={false}
+      />
       <Row title="Trending Now" fetchUrl={requests.fetchTrending} />
       <Row title="Top Rated" fetchUrl={requests.fetchTopRated} />
       <Row title="Action Movies" fetchUrl={requests.fetchActionMovies} />

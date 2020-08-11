@@ -1,9 +1,10 @@
 import React, {
   useReducer,
-  useEffect,
   forwardRef,
   useImperativeHandle,
 } from "react";
+
+import "./Swiper.css";
 
 const TRANSLATEX = "translateX";
 const DIRECTION = "direction";
@@ -73,10 +74,6 @@ const Swiper = forwardRef(({ children, ref: swiperRef }) => {
   };
 
   const [state, dispatch] = useReducer(swiperReducer, initialState);
-
-  useEffect(() => {
-    console.log(state);
-  }, []);
 
   const whereShouldIGo = () => {};
   const howManyTranslate = () => {};

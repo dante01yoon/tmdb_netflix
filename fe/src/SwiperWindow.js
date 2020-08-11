@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef, createContext, useContext } from "react";
 
 import "./SwiperWindow.css";
 
@@ -7,6 +7,19 @@ const DIRECTION = {
   LEFT: "LEFT",
   RIGHT: "RIGHT",
 };
+
+
+const swiperContext = createContext();
+const { Provider, } = swiperContext;
+
+export const useSwiperContext = () =>  {
+  const store = useContext(swiperContext);
+  if(!store){
+    throw Error("swiperContext Provider doesn't exist");
+  }
+  return store;
+}
+
 const SwiperWindow = ({ children }) => {
   const swiperRef = useRef(null);
   const realTimePointerRef = useRef({
@@ -52,7 +65,7 @@ const SwiperWindow = ({ children }) => {
     setRealTimePointerRef({ location: e.clientX });
     e.target.setPointerCapture(e.pointerId);
   };
-
+  
   const onPointerUpHandler = (e) => {
     if (isPointerMovedMoreThanTriggerPx(getPointerMovedDistance(e))) {
       const pointerMovedDistance = getPointerMovedDistance(e);
@@ -64,20 +77,27 @@ const SwiperWindow = ({ children }) => {
     } else {
       setRealTimePointerRef({ move: false });
     }
-    console.log(realTimePointerRef.current);
 
     e.target.releasePointerCapture(e.pointerId);
 
   };
+
+  const initialContextValue = {
+    pageNation: [0,0], 
+    move: false,
+    direction: DIRECTION.RIGHT,
+  }
   return (
-    <div
-      className="swiper__window"
-      onPointerMove={onPointerMoveHandler}
-      onPointerDown={onPointerDownHandler}
-      onPointerUp={onPointerUpHandler}
-    >
-      {childrenWithProps}
-    </div>
+    <Provider value={initialContextValue}>
+      <div
+        className="swiper__window"
+        onPointerMove={onPointerMoveHandler}
+        onPointerDown={onPointerDownHandler}
+        onPointerUp={onPointerUpHandler}
+      >
+        {childrenWithProps}
+      </div>
+    </Provider>
   );
 };
 
