@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef } from "react";
 
 import "./SwiperWindow.css";
 
-const TRIGGER_PX = 10;
+const TRIGGER_PX = 100;
 const DIRECTION = {
   LEFT: "LEFT",
   RIGHT: "RIGHT",
@@ -30,14 +30,14 @@ const SwiperWindow = ({ children }) => {
   };
 
   const getPointerMovedDistance = (e) => {
-    return e.clientX - realTimePointerRef?.current.location;
+    return Math.abs(e.clientX - realTimePointerRef?.current.location);
   };
 
   const getPointerDirection = (pointerMovedDistance) => {
     if (pointerMovedDistance > 0) {
-      return DIRECTION.RIGHT;
+      return DIRECTION.LEFT;
     }
-    return DIRECTION.LEFT;
+    return DIRECTION.RIGHT;
   };
 
   const isPointerMovedMoreThanTriggerPx = (pointerMovedDistance) => {
@@ -45,6 +45,15 @@ const SwiperWindow = ({ children }) => {
   };
 
   const onPointerMoveHandler = (e) => {
+    
+  };
+
+  const onPointerDownHandler = (e) => {
+    setRealTimePointerRef({ location: e.clientX });
+    e.target.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerUpHandler = (e) => {
     if (isPointerMovedMoreThanTriggerPx(getPointerMovedDistance(e))) {
       const pointerMovedDistance = getPointerMovedDistance(e);
       setRealTimePointerRef({
@@ -55,17 +64,9 @@ const SwiperWindow = ({ children }) => {
     } else {
       setRealTimePointerRef({ move: false });
     }
-  };
+    console.log(realTimePointerRef.current);
 
-  const onPointerDownHandler = (e) => {
-    setRealTimePointerRef({ location: e.clientX });
-    e.target.setPointerCapture(e.pointerId);
-    console.log('onPointerDownHandler: ', realTimePointerRef.current);
-  };
-
-  const onPointerUpHandler = (e) => {
     e.target.releasePointerCapture(e.pointerId);
-    console.log('onPointerUpHandler: ', realTimePointerRef.current);
 
   };
   return (
