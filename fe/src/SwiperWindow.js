@@ -18,11 +18,9 @@ const SwiperWindow = ({ children }) => {
   const childrenWithProps = React.cloneElement(children, { ref: swiperRef });
 
   const setRealTimePointerRef = (
-    { direction, location, move } = {
-      direction: realTimePointerRef.current.direction,
-      location: realTimePointerRef.current.location,
-      move: realTimePointerRef.current.move,
-    }
+    { direction = realTimePointerRef.current.direction, 
+      location = realTimePointerRef.current.location, 
+      move = realTimePointerRef.current.move, } 
   ) => {
     realTimePointerRef.current = {
       direction,
@@ -32,7 +30,7 @@ const SwiperWindow = ({ children }) => {
   };
 
   const getPointerMovedDistance = (e) => {
-    return e?.clientX - realTimePointerRef?.current.location;
+    return e.clientX - realTimePointerRef?.current.location;
   };
 
   const getPointerDirection = (pointerMovedDistance) => {
@@ -52,6 +50,7 @@ const SwiperWindow = ({ children }) => {
       setRealTimePointerRef({
         direction: getPointerDirection(pointerMovedDistance),
         move: true,
+        location: e.clientX
       });
     } else {
       setRealTimePointerRef({ move: false });
@@ -60,11 +59,14 @@ const SwiperWindow = ({ children }) => {
 
   const onPointerDownHandler = (e) => {
     setRealTimePointerRef({ location: e.clientX });
+    e.target.setPointerCapture(e.pointerId);
     console.log('onPointerDownHandler: ', realTimePointerRef.current);
   };
 
   const onPointerUpHandler = (e) => {
+    e.target.releasePointerCapture(e.pointerId);
     console.log('onPointerUpHandler: ', realTimePointerRef.current);
+
   };
   return (
     <div
