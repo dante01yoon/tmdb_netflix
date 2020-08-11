@@ -25,6 +25,8 @@
   max-width: 200px;
   margin-right: 10px;
   transition: transform 450ms;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .row__poster:hover {
