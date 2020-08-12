@@ -4,7 +4,6 @@ import requests from "./request";
 import Banner from "./Banner";
 import Nav from "./Nav";
 import Row from "./Row";
-import Swiper from "./Swiper";
 import SwiperWindow from "./SwiperWindow";
 
 import "./App.css";

@@ -44,7 +44,6 @@ const Row = ({ title, fetchUrl, isLargeRow = false, scroll = true }) => {
     <div className="row">
       <h2 className="row__title">{title}</h2>
       <SwiperWindow>
-        <Swiper>
           <div
             className="row__posters"
             style={{
@@ -67,7 +66,6 @@ const Row = ({ title, fetchUrl, isLargeRow = false, scroll = true }) => {
                 )
             )}
           </div>
-        </Swiper>
       </SwiperWindow>
       {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
     </div>

@@ -1,7 +1,6 @@
 import React, {
   useReducer,
   forwardRef,
-  useImperativeHandle,
 } from "react";
 
 import "./Swiper.css";
@@ -83,8 +82,6 @@ const Swiper = forwardRef(({ children, ref: swiperRef }) => {
     //dispatch direction
     dispatch(createDirectionAction(whereShouldIGo()));
   };
-
-  useImperativeHandle(swiperRef, moveHandler);
 
   return (
     <div

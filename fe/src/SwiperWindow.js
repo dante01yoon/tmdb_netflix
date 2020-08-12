@@ -1,37 +1,60 @@
-import React, { useEffect, useReducer, useRef, createContext, useContext } from "react";
+import React, { useReducer, useRef, } from "react";
+
+import SwiperProvider from "./SwiperProvider";
+import Swiper from "./Swiper";
 
 import "./SwiperWindow.css";
+import { initial } from "lodash";
 
 const TRIGGER_PX = 100;
+const TRANSLATE_X = "translateX";
+const PAGENATION = "pagenation"; 
 const DIRECTION = {
   LEFT: "LEFT",
   RIGHT: "RIGHT",
 };
 
 
-const swiperContext = createContext();
-const { Provider, } = swiperContext;
-
-export const useSwiperContext = () =>  {
-  const store = useContext(swiperContext);
-  if(!store){
-    throw Error("swiperContext Provider doesn't exist");
-  }
-  return store;
-}
-
 const SwiperWindow = ({ children }) => {
-  const swiperRef = useRef(null);
   const realTimePointerRef = useRef({
     direction: DIRECTION.RIGHT,
     location: 0,
     move: false,
   });
+  
+  
+  const initialState = {
+    ...realTimePointerRef.current,
+    pagenation: 0,
+  }
+
+  const reducer = (state, {type, payload}) => {
+    switch(type){
+      case DIRECTION:
+        return {
+          ...state,
+          direction: payload.direction
+        }
+      case TRANSLATE_X:
+        return {
+          ...state, 
+          translateX: payload.translateX
+        }
+      case PAGENATION: 
+        return {
+          ...state,
+          pagenation: payload.pagenation
+        }
+      default:
+        return state
+    }
+  }
+
+  
   const entireCardCount =  React.Children.count(children);
 
   console.log(entireCardCount);
 
-  const childrenWithProps = React.cloneElement(children, { ref: swiperRef });
 
   const setRealTimePointerRef = (
     { direction = realTimePointerRef.current.direction, 
@@ -85,22 +108,19 @@ const SwiperWindow = ({ children }) => {
 
   };
 
-  const initialContextValue = {
-    pageNation: [0,0], 
-    move: false,
-    direction: DIRECTION.RIGHT,
-  }
   return (
-    <Provider value={initialContextValue}>
+    <SwiperProvider initialState={initialState} reducer={reducer}>
       <div
         className="swiper__window"
         onPointerMove={onPointerMoveHandler}
         onPointerDown={onPointerDownHandler}
         onPointerUp={onPointerUpHandler}
       >
-        {childrenWithProps}
+        <Swiper>
+          {children} 
+        </Swiper>
       </div>
-    </Provider>
+    </SwiperProvider>
   );
 };
 
