@@ -27,6 +27,9 @@ const SwiperWindow = ({ children }) => {
     location: 0,
     move: false,
   });
+  const entireCardCount =  React.Children.count(children);
+
+  console.log(entireCardCount);
 
   const childrenWithProps = React.cloneElement(children, { ref: swiperRef });
 
