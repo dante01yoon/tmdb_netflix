@@ -1,10 +1,9 @@
-import React, { useReducer, useRef, } from "react";
+import React, { useRef, useEffect } from "react";
 
 import SwiperProvider from "./SwiperProvider";
 import Swiper from "./Swiper";
 
 import "./SwiperWindow.css";
-import { initial } from "lodash";
 
 const TRIGGER_PX = 100;
 const TRANSLATE_X = "translateX";
@@ -16,6 +15,7 @@ const DIRECTION = {
 
 
 const SwiperWindow = ({ children }) => {
+  const childrenRef = useRef(0);
   const realTimePointerRef = useRef({
     direction: DIRECTION.RIGHT,
     location: 0,
@@ -79,6 +79,7 @@ const SwiperWindow = ({ children }) => {
     return DIRECTION.RIGHT;
   };
 
+
   const isPointerMovedMoreThanTriggerPx = (pointerMovedDistance) => {
     return Math.abs(pointerMovedDistance) > TRIGGER_PX;
   };
@@ -104,20 +105,26 @@ const SwiperWindow = ({ children }) => {
       setRealTimePointerRef({ move: false });
     }
 
+    
     e.target.releasePointerCapture(e.pointerId);
-
   };
-
+  const handleClick = () => {
+    console.log(childrenRef);
+  }
+  const childrenWithProps = 
+    React.cloneElement(children, { childrenRef });
+  console.log(childrenRef);
   return (
     <SwiperProvider initialState={initialState} reducer={reducer}>
       <div
+        onClick={handleClick}
         className="swiper__window"
         onPointerMove={onPointerMoveHandler}
         onPointerDown={onPointerDownHandler}
         onPointerUp={onPointerUpHandler}
       >
         <Swiper>
-          {children} 
+          {childrenWithProps} 
         </Swiper>
       </div>
     </SwiperProvider>
