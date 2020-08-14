@@ -1,4 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
+import useResponsiveLayout from "./utils/responsive";
+
 import { useSwiperContext } from "./SwiperProvider";
 
 import "./Swiper.css";
@@ -11,6 +13,7 @@ const DIRECTION = {
 };
 
 const Swiper = ({ children }) => {
+  const [windowState, setWindowState] = useResponsiveLayout();
   const [state, dispatch] = useSwiperContext();
 
   const realTimePointerRef = useRef({
@@ -18,6 +21,10 @@ const Swiper = ({ children }) => {
     location: 0,
     move: false,
   });
+
+  useEffect(() => {
+    console.log("windowState: ", windowState);
+  }, [windowState]);
 
   const setRealTimePointerRef = ({
     direction = realTimePointerRef.current.direction,
@@ -57,7 +64,7 @@ const Swiper = ({ children }) => {
     const pointerMovedDistance = getPointerMovedDistance(e);
 
     setRealTimePointerRef({
-      direction: getPointerDirection(getPointerMovedDistance(e)),
+      direction: getPointerDirection(pointerMovedDistance),
       move: true,
       location: e.clientX,
     });

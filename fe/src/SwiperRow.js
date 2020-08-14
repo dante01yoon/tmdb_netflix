@@ -13,6 +13,7 @@ import "./SwiperRow.css";
 const TRIGGER_PX = 100;
 const TRANSLATE_X = "translateX";
 const PAGENATION = "pagenation";
+const SLIDING_DIRECTION = "DIRECTION";
 const DIRECTION = {
   LEFT: "left",
   RIGHT: "right",
@@ -77,7 +78,7 @@ const SwiperRow = ({ title, fetchUrl }) => {
 
   const reducer = (state, { type, payload }) => {
     switch (type) {
-      case DIRECTION:
+      case SLIDING_DIRECTION:
         return {
           ...state,
           direction: payload.direction,
