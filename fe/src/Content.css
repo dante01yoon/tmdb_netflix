@@ -1,7 +1,32 @@
+@media (min-width: 1400px) {
+  .content {
+    width: 15.5%;
+  }
+}
+
+@media (max-width: 1399px) {
+  .content {
+    width: 18.8%;
+  }
+}
+@media screen and (max-width: 1099px) {
+  .content {
+    width: 23.5%;
+  }
+}
+@media screen and (max-width: 799px) {
+  .content {
+    width: 31%;
+  }
+}
+@media screen and (max-width: 499px) {
+  .content {
+    width: 45%;
+  }
+}
+
 .content {
   object-fit: contain;
-  width: 100%;
-  max-width: 200px;
   margin-right: 10px;
   transition: transform 450ms;
   user-select: none;

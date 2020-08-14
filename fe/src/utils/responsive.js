@@ -9,7 +9,7 @@ export const WINDOW_BREAKPOINT = {
 };
 
 export const getWindowCardCount = (breakpoint) => {
-  switch (WINDOW_BREAKPOINT) {
+  switch (breakpoint) {
     case 499:
       return 2;
     case 799:
@@ -24,15 +24,15 @@ export const getWindowCardCount = (breakpoint) => {
 };
 
 export const getWindowCardPadding = (breakpoint) => {
-  switch (WINDOW_BREAKPOINT) {
+  switch (breakpoint) {
     case 499:
-      return 20;
+      return 10;
     case 799:
       return 20;
     case 1099:
-      return 20;
+      return 30;
     case 1399:
-      return 20;
+      return 40;
     default:
       return 20;
   }
@@ -40,6 +40,7 @@ export const getWindowCardPadding = (breakpoint) => {
 
 const useResponsiveLayout = () => {
   const getWindowBreakpoint = () => {
+    console.log(window.innerWidth);
     if (window) {
       const windowWidth = window.innerWidth;
       if (windowWidth < 500) {
@@ -55,32 +56,6 @@ const useResponsiveLayout = () => {
     }
   };
 
-  // const BREAKPOINT_ACTION = "breakpoint";
-  // const CARD_PADDING_ACTION = "cardPadding";
-  // const CARD_COUNT = "cardCount";
-
-  // const windowReducer = (state, { type, payload }) => {
-  //   switch (type) {
-  //     case BREAKPOINT_ACTION:
-  //       return {
-  //         ...state,
-  //         breakPoint: payload.breakPoint,
-  //       };
-  //     case CARD_PADDING_ACTION:
-  //       return {
-  //         ...state,
-  //         cadPadding: payload.cardPadding,
-  //       };
-  //     case CARD_COUNT:
-  //       return {
-  //         ...state,
-  //         cardCount: payload.cardCount,
-  //       };
-  //   }
-  // };
-
-  // const [windowState, windowDispatch] = useReducer(initialState, windowReducer);
-
   const initialState = {
     breakPoint: WINDOW_BREAKPOINT.l1400,
     cardCount: 6,
@@ -92,10 +67,12 @@ const useResponsiveLayout = () => {
   const resizeHandler = (e) => {
     console.log("resizing...");
     const currentBreakPoint = getWindowBreakpoint();
+    const cardCount = getWindowCardCount(currentBreakPoint);
+    const cardPadding = getWindowCardPadding(currentBreakPoint);
     const currentWindowValue = {
       breakPoint: currentBreakPoint,
-      cardCount: getWindowCardCount(currentBreakPoint),
-      cardPadding: getWindowCardPadding(currentBreakPoint),
+      cardCount,
+      cardPadding,
     };
     setState(currentWindowValue);
   };
