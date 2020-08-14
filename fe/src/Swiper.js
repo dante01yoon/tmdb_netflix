@@ -1,95 +1,96 @@
-import React, { useReducer, forwardRef } from "react";
+import React, { useRef } from "react";
+import { useSwiperContext } from "./SwiperProvider";
 
 import "./Swiper.css";
 
-const TRANSLATEX = "translateX";
-const DIRECTION = "direction";
-const RIGHTDIRECTION = {
+const TRIGGER_PX = 100;
+const TRANSLATE_X = "translateX";
+const DIRECTION = {
   RIGHT: "right",
   LEFT: "left",
-  ALL: "all",
 };
 
-const Swiper = ({ children, ref: swiperRef }) => {
-  // Action
-  const translateAction = {
-    type: TRANSLATEX,
-    payload: {},
-  };
+const Swiper = ({ children }) => {
+  const [state, dispatch] = useSwiperContext();
 
-  const directionAction = {
-    type: DIRECTION,
-    payload: {},
-  };
+  const realTimePointerRef = useRef({
+    direction: DIRECTION.RIGHT,
+    location: 0,
+    move: false,
+  });
 
-  // Action Creator
-  const createTranslateAction = (translateX) => {
-    const payload = Object.assign({}, translateAction.payload);
-    return {
-      type: translateAction.type,
-      payload: Object.assign(payload, {
-        translateX,
-      }),
+  const setRealTimePointerRef = ({
+    direction = realTimePointerRef.current.direction,
+    location = realTimePointerRef.current.location,
+    move = realTimePointerRef.current.move,
+  }) => {
+    realTimePointerRef.current = {
+      direction,
+      location,
+      move,
     };
   };
 
-  const createDirectionAction = (direction) => {
-    const payload = Object.assign({}, translateAction.payload);
-    return {
-      type: directionAction.type,
-      payload: Object.assign(payload, {
-        direction,
-      }),
-    };
+  const getPointerDirection = (pointerMovedDistance) => {
+    if (pointerMovedDistance < 0) {
+      return DIRECTION.LEFT;
+    }
+    return DIRECTION.RIGHT;
   };
 
-  // Initial State
-  const initialState = Object.assign(
-    {},
-    {
-      translateX: 0,
-      direction: RIGHTDIRECTION.RIGHT,
-    }
-  );
-
-  // Reducer
-  const swiperReducer = (state, action) => {
-    const { payload } = action;
-    switch (action) {
-      case TRANSLATEX:
-        return {
-          ...state,
-          translateX: payload.translateX,
-        };
-      case DIRECTION:
-        return {
-          ...state,
-          direction: payload.direction,
-        };
-    }
+  const isPointerMovedMoreThanTriggerPx = (pointerMovedDistance) => {
+    return Math.abs(pointerMovedDistance) > TRIGGER_PX;
   };
 
-  const [state, dispatch] = useReducer(swiperReducer, initialState);
+  const onPointerMoveHandler = (e) => {};
 
-  const whereShouldIGo = () => {};
-  const howManyTranslate = () => {};
-  const moveHandler = (event) => {
-    //dispatch translateX
-    dispatch(createTranslateAction(howManyTranslate()));
-    //dispatch direction
-    dispatch(createDirectionAction(whereShouldIGo()));
+  const onPointerDownHandler = (e) => {
+    setRealTimePointerRef({ location: e.clientX });
+    e.target.setPointerCapture(e.pointerId);
+  };
+
+  const getPointerMovedDistance = (e) => {
+    return e.clientX - realTimePointerRef?.current.location;
+  };
+
+  const setRealTimePointerRefOnPointerUp = (e) => {
+    const pointerMovedDistance = getPointerMovedDistance(e);
+
+    setRealTimePointerRef({
+      direction: getPointerDirection(getPointerMovedDistance(e)),
+      move: true,
+      location: e.clientX,
+    });
+  };
+
+  const onPointerUpHandler = (e) => {
+    const pointerMovedDistance = getPointerMovedDistance(e);
+
+    if (isPointerMovedMoreThanTriggerPx(pointerMovedDistance)) {
+      setRealTimePointerRefOnPointerUp(e);
+    } else {
+      setRealTimePointerRef({ move: false });
+    }
+    console.log(realTimePointerRef.current);
+    e.target.releasePointerCapture(e.pointerId);
   };
 
   return (
     <div
-      className="swiper__mover"
-      style={{
-        overflowX: "hidden",
-        transform: `translateX(${state?.translateX})`,
-      }}
-      onPointerMove={moveHandler}
+      className="swiper__container"
+      onPointerMove={onPointerMoveHandler}
+      onPointerDown={onPointerDownHandler}
+      onPointerUp={onPointerUpHandler}
     >
-      {children}
+      <div
+        className="swiper__mover"
+        style={{
+          overflowX: "hidden",
+          transform: `translateX(${state.translateX}%)`,
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };

@@ -14,13 +14,14 @@ const TRIGGER_PX = 100;
 const TRANSLATE_X = "translateX";
 const PAGENATION = "pagenation";
 const DIRECTION = {
-  LEFT: "LEFT",
-  RIGHT: "RIGHT",
+  LEFT: "left",
+  RIGHT: "right",
 };
 
-const SwiperRow = ({ title, fetchUrl, scroll }) => {
+const SwiperRow = ({ title, fetchUrl }) => {
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState("");
+
   useEffect(() => {
     new Promise((resolve) => {
       resolve(instance.request({ method: "GET", url: fetchUrl }));
@@ -65,7 +66,9 @@ const SwiperRow = ({ title, fetchUrl, scroll }) => {
   const contentsCount = React.Children.count(renderContents(movies));
 
   const initialState = {
-    ...realTimePointerRef.current,
+    translateX: 0,
+    direction: DIRECTION.RIGHT,
+    move: false,
     pagenation: {
       total: contentsCount,
       current: 0,
@@ -94,55 +97,6 @@ const SwiperRow = ({ title, fetchUrl, scroll }) => {
     }
   };
 
-  const setRealTimePointerRef = ({
-    direction = realTimePointerRef.current.direction,
-    location = realTimePointerRef.current.location,
-    move = realTimePointerRef.current.move,
-  }) => {
-    realTimePointerRef.current = {
-      direction,
-      location,
-      move,
-    };
-  };
-
-  const getPointerMovedDistance = (e) => {
-    return Math.abs(e.clientX - realTimePointerRef?.current.location);
-  };
-
-  const getPointerDirection = (pointerMovedDistance) => {
-    if (pointerMovedDistance > 0) {
-      return DIRECTION.LEFT;
-    }
-    return DIRECTION.RIGHT;
-  };
-
-  const isPointerMovedMoreThanTriggerPx = (pointerMovedDistance) => {
-    return Math.abs(pointerMovedDistance) > TRIGGER_PX;
-  };
-
-  const onPointerMoveHandler = (e) => {};
-
-  const onPointerDownHandler = (e) => {
-    setRealTimePointerRef({ location: e.clientX });
-    e.target.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerUpHandler = (e) => {
-    if (isPointerMovedMoreThanTriggerPx(getPointerMovedDistance(e))) {
-      const pointerMovedDistance = getPointerMovedDistance(e);
-      setRealTimePointerRef({
-        direction: getPointerDirection(pointerMovedDistance),
-        move: true,
-        location: e.clientX,
-      });
-    } else {
-      setRealTimePointerRef({ move: false });
-    }
-
-    e.target.releasePointerCapture(e.pointerId);
-  };
-
   const renderTrailer = () => {
     const opts = {
       height: "390px",
@@ -155,16 +109,12 @@ const SwiperRow = ({ title, fetchUrl, scroll }) => {
       return <YouTube videoId={trailerUrl} opts={opts} />;
     }
   };
+
   return (
     <>
       <SwiperProvider initialState={initialState} reducer={reducer}>
         <h2 className="row__title">{title}</h2>
-        <div
-          className="swiper__window"
-          onPointerMove={onPointerMoveHandler}
-          onPointerDown={onPointerDownHandler}
-          onPointerUp={onPointerUpHandler}
-        >
+        <div className="swiper__window">
           <Swiper>{renderContents(movies)}</Swiper>
         </div>
       </SwiperProvider>
