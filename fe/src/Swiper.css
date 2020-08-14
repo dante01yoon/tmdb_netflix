@@ -1,3 +1,5 @@
 .swiper__mover {
   transition: transform 0.54s ease;
+  display: flex;
+  padding: 20px;
 }

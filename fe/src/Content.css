@@ -1,0 +1,14 @@
+.content {
+  object-fit: contain;
+  width: 100%;
+  max-width: 200px;
+  margin-right: 10px;
+  transition: transform 450ms;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.content:hover {
+  transform: scale(1.08);
+  cursor: pointer;
+}

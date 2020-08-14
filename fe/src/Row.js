@@ -1,31 +1,28 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import React, { useState, useEffect } from "react";
 import YouTube from "react-youtube";
 import movieTrailer from "movie-trailer";
 import instance from "./axios";
-
-
 
 import "./Row.css";
 
 const ImageSource = "https://image.tmdb.org/t/p/original";
 
-const Row = forwardRef(({ title, fetchUrl, childrenRef,isLargeRow = false, scroll = true, children }) => {
+const Row = ({
+  title,
+  fetchUrl,
+  isLargeRow = false,
+  scroll = true,
+  children,
+}) => {
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState("");
   useEffect(() => {
     new Promise((resolve) => {
       resolve(instance.request({ method: "GET", url: fetchUrl }));
-    }).then((value) => {
-      setMovies(value.data.results);
+    }).then((response) => {
+      setMovies(response.data.results);
     });
-
-  }, [fetchUrl]);
-  useEffect(() => {
-    console.log(childrenRef);
-
-  })
-  useImperativeHandle(childrenRef, () => movies.length, [movies.length]);
-  
+  });
   const opts = {
     height: "390px",
     width: "100%",
@@ -46,7 +43,7 @@ const Row = forwardRef(({ title, fetchUrl, childrenRef,isLargeRow = false, scrol
     }
   };
 
-  const renderContents  = (movies) => {
+  const renderContents = (movies) => {
     return movies?.map(
       (movie) =>
         movie.poster_path &&
@@ -61,8 +58,8 @@ const Row = forwardRef(({ title, fetchUrl, childrenRef,isLargeRow = false, scrol
             alt={movie.name}
           />
         )
-    )
-  }
+    );
+  };
   return (
     <div className="row">
       <h2 className="row__title">{title}</h2>
@@ -77,6 +74,6 @@ const Row = forwardRef(({ title, fetchUrl, childrenRef,isLargeRow = false, scrol
       {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
     </div>
   );
-});
+};
 
 export default Row;

@@ -1,7 +1,4 @@
-import React, {
-  useReducer,
-  forwardRef,
-} from "react";
+import React, { useReducer, forwardRef } from "react";
 
 import "./Swiper.css";
 
@@ -13,7 +10,7 @@ const RIGHTDIRECTION = {
   ALL: "all",
 };
 
-const Swiper = forwardRef(({ children, ref: swiperRef }) => {
+const Swiper = ({ children, ref: swiperRef }) => {
   // Action
   const translateAction = {
     type: TRANSLATEX,
@@ -87,6 +84,7 @@ const Swiper = forwardRef(({ children, ref: swiperRef }) => {
     <div
       className="swiper__mover"
       style={{
+        overflowX: "hidden",
         transform: `translateX(${state?.translateX})`,
       }}
       onPointerMove={moveHandler}
@@ -94,6 +92,6 @@ const Swiper = forwardRef(({ children, ref: swiperRef }) => {
       {children}
     </div>
   );
-});
+};
 
 export default Swiper;

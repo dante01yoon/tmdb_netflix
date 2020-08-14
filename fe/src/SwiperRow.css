@@ -1,0 +1,7 @@
+.swiper__window {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  overflow-y: hidden;
+}
