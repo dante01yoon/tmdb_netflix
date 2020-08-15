@@ -8,6 +8,7 @@ export const WINDOW_BREAKPOINT = {
   l1400: 1400,
 };
 
+
 export const getWindowCardCount = (breakpoint) => {
   switch (breakpoint) {
     case 499:
@@ -38,6 +39,21 @@ export const getWindowCardPadding = (breakpoint) => {
   }
 };
 
+const getWindowCardTransitionPercentage = (breakpoint)=>{
+  switch (breakpoint) {
+    case 499:
+      return 45;
+    case 799:
+      return 31;
+    case 1099:
+      return 23.5;
+    case 1399:
+      return 18.8;
+    default:
+      return 15.5;
+  }
+}
+
 const useResponsiveLayout = () => {
   const getWindowBreakpoint = () => {
     console.log(window.innerWidth);
@@ -60,6 +76,7 @@ const useResponsiveLayout = () => {
     breakPoint: WINDOW_BREAKPOINT.l1400,
     cardExposedInRow: 6,
     cardPadding: 20,
+    cardTransitionPercentage: 15.5
   };
 
   const [state, setState] = useState(initialState);
@@ -69,10 +86,12 @@ const useResponsiveLayout = () => {
     const currentBreakPoint = getWindowBreakpoint();
     const cardExposedInRow = getWindowCardCount(currentBreakPoint);
     const cardPadding = getWindowCardPadding(currentBreakPoint);
+    const cardTransitionPercentage = getWindowCardTransitionPercentage(currentBreakPoint);
     const currentWindowValue = {
       breakPoint: currentBreakPoint,
       cardExposedInRow,
       cardPadding,
+      cardTransitionPercentage
     };
     setState(currentWindowValue);
   };

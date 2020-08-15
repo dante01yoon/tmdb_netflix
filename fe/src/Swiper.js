@@ -37,6 +37,7 @@ const Swiper = ({ children }) => {
     }
     return true;
   };
+  // 몇 페이지나 나와야 하는가 
   const getTotalPageIndex = () => {
     const dividedNumber =
       state.pagenation.contentsCount / windowState.cardExposedInRow;
@@ -47,9 +48,11 @@ const Swiper = ({ children }) => {
       state.pagenation.contentsCount / windowState.cardExposedInRow
     );
   };
-  const getCurrentPageIndex = () => {
-    return;
-  };
+  
+  useEffect(() =>{
+    console.log(state.pagenation)
+    console.log(getTotalPageIndex())
+  }, )
 
   const setRealTimePointerRef = ({
     direction = realTimePointerRef.current.direction,
