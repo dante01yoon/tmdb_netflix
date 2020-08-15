@@ -157,11 +157,11 @@ const Swiper =  ({ children }) => {
       onPointerMove={onPointerMoveHandler}
       onPointerDown={onPointerDownHandler}
       onPointerUp={onPointerUpHandler}
+      
     >
       <div
         className="swiper__mover"
         style={{
-          overflowX: "hidden",
           transform: `translateX(${state.translateX}%)`,
         }}
       >
