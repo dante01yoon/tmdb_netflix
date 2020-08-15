@@ -10,16 +10,16 @@ import Content from "./Content";
 
 import "./SwiperRow.css";
 
-const TRIGGER_PX = 100;
-const TRANSLATE_X = "translateX";
-const PAGENATION = "pagenation";
-const SLIDING_DIRECTION = "DIRECTION";
+export const TRANSLATE_X = "translateX";
+export const PAGENATION = "pagenation";
+export const SLIDING_DIRECTION = "DIRECTION";
 const DIRECTION = {
   LEFT: "left",
   RIGHT: "right",
 };
 
 const SwiperRow = ({ title, fetchUrl }) => {
+  const [childrenCount, setChildrenCount ] = useState(0); 
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState("");
 
@@ -64,18 +64,16 @@ const SwiperRow = ({ title, fetchUrl }) => {
     [movies]
   );
 
-  const contentsCount = React.Children.count(renderContents(movies));
-
   const initialState = {
     translateX: 0,
     direction: DIRECTION.RIGHT,
     move: false,
     pagenation: {
-      contentsCount: contentsCount,
+      contentsCount: 0,
       currentPage: 0
     },
   };
-
+  
   const reducer = (state, { type, payload }) => {
     switch (type) {
       case SLIDING_DIRECTION:

@@ -1,18 +1,17 @@
 import React, { useRef, useEffect } from "react";
 import useResponsiveLayout from "./utils/responsive";
-
+import { TRANSLATE_X , PAGENATION, SLIDING, SLIDING_DIRECTION } from "./SwiperRow";
 import { useSwiperContext } from "./SwiperProvider";
 
 import "./Swiper.css";
 
 const TRIGGER_PX = 100;
-const TRANSLATE_X = "translateX";
 const DIRECTION = {
   RIGHT: "right",
   LEFT: "left",
 };
 
-const Swiper = ({ children }) => {
+const Swiper =  ({ children }) => {
   const [windowState, setWindowState] = useResponsiveLayout();
   const [state, dispatch] = useSwiperContext();
 
@@ -37,6 +36,7 @@ const Swiper = ({ children }) => {
     }
     return true;
   };
+
   // 몇 페이지나 나와야 하는가 
   const getTotalPageIndex = () => {
     const dividedNumber =
@@ -50,9 +50,47 @@ const Swiper = ({ children }) => {
   };
   
   useEffect(() =>{
-    console.log(state.pagenation)
+    console.log('state pagenation: ', state.pagenation)
     console.log(getTotalPageIndex())
   }, )
+  
+  const slidingActionCreator = (direction) => {
+    return({
+      type: SLIDING_DIRECTION,
+      payload: {
+        direction
+      }
+    })
+  }
+
+  const translateActionCreator = (translateX) => {
+    return({
+      type: TRANSLATE_X,
+      payload: {
+        translateX 
+      }
+    })
+  }
+
+  const pagenationActionCreator = (pagenation) => {
+    return({
+      type: PAGENATION,
+      payload: {
+        pagenation
+      }
+    })
+  }
+
+  const contentsCount = React.Children.count(children); 
+
+  useEffect(() => {
+    dispatch(pagenationActionCreator(
+      {
+        ...state.pagenation,
+        contentsCount
+      }
+    ))
+  }, [contentsCount])
 
   const setRealTimePointerRef = ({
     direction = realTimePointerRef.current.direction,
@@ -98,6 +136,9 @@ const Swiper = ({ children }) => {
     });
   };
 
+  const moveTransition = () => {
+    
+  }
   const onPointerUpHandler = (e) => {
     const pointerMovedDistance = getPointerMovedDistance(e);
 
