@@ -58,7 +58,7 @@ const useResponsiveLayout = () => {
 
   const initialState = {
     breakPoint: WINDOW_BREAKPOINT.l1400,
-    cardCount: 6,
+    cardExposedInRow: 6,
     cardPadding: 20,
   };
 
@@ -67,11 +67,11 @@ const useResponsiveLayout = () => {
   const resizeHandler = (e) => {
     console.log("resizing...");
     const currentBreakPoint = getWindowBreakpoint();
-    const cardCount = getWindowCardCount(currentBreakPoint);
+    const cardExposedInRow = getWindowCardCount(currentBreakPoint);
     const cardPadding = getWindowCardPadding(currentBreakPoint);
     const currentWindowValue = {
       breakPoint: currentBreakPoint,
-      cardCount,
+      cardExposedInRow,
       cardPadding,
     };
     setState(currentWindowValue);

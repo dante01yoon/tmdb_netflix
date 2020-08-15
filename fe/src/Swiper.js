@@ -26,6 +26,31 @@ const Swiper = ({ children }) => {
     console.log("windowState: ", windowState);
   }, [windowState]);
 
+  /***
+   *
+   * pagenation begins with 0
+   */
+
+  const isNumberIsNatural = (number) => {
+    if (number.toString().split(".").length > 1) {
+      return false;
+    }
+    return true;
+  };
+  const getTotalPageIndex = () => {
+    const dividedNumber =
+      state.pagenation.contentsCount / windowState.cardExposedInRow;
+    if (isNumberIsNatural(dividedNumber)) {
+      return dividedNumber - 1;
+    }
+    return Math.trunc(
+      state.pagenation.contentsCount / windowState.cardExposedInRow
+    );
+  };
+  const getCurrentPageIndex = () => {
+    return;
+  };
+
   const setRealTimePointerRef = ({
     direction = realTimePointerRef.current.direction,
     location = realTimePointerRef.current.location,

@@ -71,8 +71,8 @@ const SwiperRow = ({ title, fetchUrl }) => {
     direction: DIRECTION.RIGHT,
     move: false,
     pagenation: {
-      total: contentsCount,
-      current: 0,
+      contentsCount: contentsCount,
+      currentCardIndex: 0,
     },
   };
 
