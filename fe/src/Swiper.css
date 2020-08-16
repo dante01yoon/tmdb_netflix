@@ -1,8 +1,34 @@
 .swiper__container {
   overflow: hidden;
 }
+@media (min-width: 1400px) {
+  .swiper__container {
+    padding: 20px 15.5%;
+  }
+}
+
+@media (max-width: 1399px) {
+  .swiper__container {
+    padding: 20px 18.8%;
+  }
+}
+@media screen and (max-width: 1099px) {
+  .swiper__container {
+   padding: 37.625px;
+  }
+}
+@media screen and (max-width: 799px) {
+  .swiper__container {
+    padding: 20px 31%;
+  }
+}
+@media screen and (max-width: 499px) {
+  .swiper__container {
+    padding: 20px 45%;
+  }
+}
 .swiper__mover {
   transition: transform 0.54s ease;
   display: flex;
-  padding: 20px;
+  padding: 20px 0;
 }

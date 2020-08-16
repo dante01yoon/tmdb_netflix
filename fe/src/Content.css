@@ -11,7 +11,7 @@
 }
 @media screen and (max-width: 1099px) {
   .content {
-    width: 23.5%;
+    width: 24%;
   }
 }
 @media screen and (max-width: 799px) {
@@ -27,7 +27,7 @@
 
 .content {
   object-fit: contain;
-  margin-right: 10px;
+  margin-right: 8px;
   transition: transform 450ms;
   user-select: none;
   -webkit-user-drag: none;
