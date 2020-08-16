@@ -3,28 +3,28 @@
 }
 @media (min-width: 1400px) {
   .swiper__container {
-    padding: 20px 15.5%;
+    padding: 20px 57px;
   }
 }
 
 @media (max-width: 1399px) {
   .swiper__container {
-    padding: 20px 18.8%;
+    padding: 20px 54px;
   }
 }
 @media screen and (max-width: 1099px) {
   .swiper__container {
-   padding: 37.625px;
+    padding: 20px 42px;
   }
 }
 @media screen and (max-width: 799px) {
   .swiper__container {
-    padding: 20px 31%;
+    padding: 20px 26px;
   }
 }
 @media screen and (max-width: 499px) {
   .swiper__container {
-    padding: 20px 45%;
+    padding: 20px;
   }
 }
 .swiper__mover {
