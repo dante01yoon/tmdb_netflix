@@ -1,27 +1,27 @@
 @media (min-width: 1400px) {
   .content {
-    width: 15.5%;
+    width: 16.17%;
   }
 }
 
 @media (max-width: 1399px) {
   .content {
-    width: 18.8%;
+    width: 19.45%;
   }
 }
 @media screen and (max-width: 1099px) {
   .content {
-    width: 24%;
+    width: 24.35%;
   }
 }
 @media screen and (max-width: 799px) {
   .content {
-    width: 31%;
+    width: 32.6%;
   }
 }
 @media screen and (max-width: 499px) {
   .content {
-    width: 45%;
+    width: 49%;
   }
 }
 

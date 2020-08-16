@@ -1,6 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import useResponsiveLayout from "./utils/responsive";
-import { TRANSLATE_X , PAGENATION, SLIDING, SLIDING_DIRECTION } from "./SwiperRow";
+import {
+  TRANSLATE_X,
+  PAGENATION,
+  SLIDING,
+  SLIDING_DIRECTION,
+} from "./SwiperRow";
 import { useSwiperContext } from "./SwiperProvider";
 
 import "./Swiper.css";
@@ -11,10 +16,11 @@ const DIRECTION = {
   LEFT: "left",
 };
 
-const Swiper =  ({ children }) => {
+const Swiper = ({ children }) => {
   const [windowState, setWindowState] = useResponsiveLayout();
   const [state, dispatch] = useSwiperContext();
 
+  const containerRef = useRef(null);
   const realTimePointerRef = useRef({
     direction: DIRECTION.RIGHT,
     location: 0,
@@ -25,72 +31,47 @@ const Swiper =  ({ children }) => {
     console.log("windowState: ", windowState);
   }, [windowState]);
 
-  /***
-   *
-   * pagenation begins with 0
-   */
-
-  const isNumberIsNatural = (number) => {
-    if (number.toString().split(".").length > 1) {
-      return false;
-    }
-    return true;
-  };
-
-  // 몇 페이지나 나와야 하는가 
-  const getTotalPageIndex = () => {
-    const dividedNumber =
-      state.pagenation.contentsCount / windowState.cardExposedInRow;
-    if (isNumberIsNatural(dividedNumber)) {
-      return dividedNumber - 1;
-    }
-    return Math.trunc(
-      state.pagenation.contentsCount / windowState.cardExposedInRow
-    );
-  };
-  
-  useEffect(() =>{
-    console.log('state pagenation: ', state.pagenation)
-    console.log(getTotalPageIndex())
-  }, )
-  
   const slidingActionCreator = (direction) => {
-    return({
+    return {
       type: SLIDING_DIRECTION,
       payload: {
-        direction
-      }
-    })
-  }
+        direction,
+      },
+    };
+  };
 
   const translateActionCreator = (translateX) => {
-    return({
+    return {
       type: TRANSLATE_X,
       payload: {
-        translateX 
-      }
-    })
-  }
+        translateX,
+      },
+    };
+  };
 
   const pagenationActionCreator = (pagenation) => {
-    return({
+    return {
       type: PAGENATION,
       payload: {
-        pagenation
-      }
-    })
-  }
+        pagenation,
+      },
+    };
+  };
 
-  const contentsCount = React.Children.count(children); 
+  const contentsCount = React.Children.count(children);
 
   useEffect(() => {
-    dispatch(pagenationActionCreator(
-      {
+    dispatch(
+      pagenationActionCreator({
         ...state.pagenation,
-        contentsCount
-      }
-    ))
-  }, [contentsCount])
+        contentsCount,
+      })
+    );
+  }, [contentsCount]);
+
+  useEffect(() => {
+    console.log("state: ", state);
+  }, [state]);
 
   const setRealTimePointerRef = ({
     direction = realTimePointerRef.current.direction,
@@ -115,8 +96,6 @@ const Swiper =  ({ children }) => {
     return Math.abs(pointerMovedDistance) > TRIGGER_PX;
   };
 
-  const onPointerMoveHandler = (e) => {};
-
   const onPointerDownHandler = (e) => {
     setRealTimePointerRef({ location: e.clientX });
     e.target.setPointerCapture(e.pointerId);
@@ -126,9 +105,8 @@ const Swiper =  ({ children }) => {
     return e.clientX - realTimePointerRef?.current.location;
   };
 
-  const setRealTimePointerRefOnPointerUp = (e) => {
+  const setRealTimePointerRefOnMove = (e) => {
     const pointerMovedDistance = getPointerMovedDistance(e);
-
     setRealTimePointerRef({
       direction: getPointerDirection(pointerMovedDistance),
       move: true,
@@ -136,34 +114,153 @@ const Swiper =  ({ children }) => {
     });
   };
 
-  const moveTransition = () => {
-    
-  }
+  const currentPage = state.pagenation.currentPage;
+
+  const isCurrentPageFirstPage = () => {
+    if (currentPage === 0) {
+      return true;
+    }
+    return false;
+  };
+  const isCurrentPageLastPage = () => {
+    if (currentPage === totalPage) {
+      return true;
+    }
+    return false;
+  };
+  const isNextPageLastPage = () => {
+    if (currentPage + 1 === totalPage) {
+      return true;
+    }
+    return false;
+  };
+
+  const isMoveToRight = () => {
+    if (realTimePointerRef.current.direction === DIRECTION.RIGHT) {
+      return !isCurrentPageFirstPage();
+    }
+    return false;
+  };
+
+  // pagenation은 0 부터 시작
+  const isNumberIsNatural = (number) => {
+    if (number.toString().split(".").length > 1) {
+      return false;
+    }
+    return true;
+  };
+
+  // 몇 페이지나 나와야 하는가
+  const getTotalPageIndex = () => {
+    const dividedNumber =
+      state.pagenation.contentsCount / windowState.cardExposedInRow;
+    if (isNumberIsNatural(dividedNumber)) {
+      return dividedNumber - 1;
+    }
+    return Math.trunc(
+      state.pagenation.contentsCount / windowState.cardExposedInRow
+    );
+  };
+
+  const totalPage = getTotalPageIndex();
+
+  const isMoveToLeft = () => {
+    if (realTimePointerRef.current.direction === DIRECTION.LEFT) {
+      return !isCurrentPageLastPage();
+    }
+    return false;
+  };
+  useEffect(() => {
+    console.log("currentPage: ", state.pagenation.currentPage);
+  }, [state]);
+
+  const isSinglePage = () => {
+    if (!totalPage) {
+      return true;
+    }
+    return false;
+  };
+
+  const getLastPageCardCount = () => {
+    const updatedContentsCount = state.pagenation.contentsCount;
+    if (isSinglePage()) {
+      return updatedContentsCount;
+    }
+    const { cardExposedInRow } = windowState;
+    const { contentsCount } = state.pagenation;
+    return updatedContentsCount - (totalPage - 1) * cardExposedInRow;
+  };
+
+  const getTransitionMove = () => {
+    const { cardPadding, cardExposedInRow } = windowState;
+    const singleCardWidthPx =
+      (containerRef?.current.offsetWidth - cardPadding * 2) / cardExposedInRow;
+    const defaultDistanceToMove = singleCardWidthPx * cardExposedInRow;
+
+    if (isNextPageLastPage()) {
+      console.log("isNextPageLastPage");
+      console.log("getLastPageCardCount: ", getLastPageCardCount());
+      const cardCountToFillExposedInRow =
+        cardExposedInRow - getLastPageCardCount();
+      console.log("cardExposedInRow: ", cardCountToFillExposedInRow);
+      return (
+        defaultDistanceToMove - cardCountToFillExposedInRow * singleCardWidthPx
+      );
+    }
+    console.log(defaultDistanceToMove);
+    return defaultDistanceToMove;
+  };
+
+  const doTransition = () => {
+    const transitionMove = getTransitionMove();
+    console.log("transitionMove: ", transitionMove);
+    if (realTimePointerRef.current.move) {
+      if (isMoveToLeft()) {
+        dispatch(
+          pagenationActionCreator({
+            ...state.pagenation,
+            currentPage: state.pagenation.currentPage + 1,
+          })
+        );
+        dispatch(translateActionCreator(-transitionMove));
+      } else if (isMoveToRight()) {
+        console.log("before dispatch: ", state.pagenation);
+        console.log("after dispatch: ", state.pagenation);
+        dispatch(
+          pagenationActionCreator({
+            ...state.pagenation,
+            currentPage: state.pagenation.currentPage - 1,
+          })
+        );
+        dispatch(translateActionCreator(-transitionMove * currentPage));
+      }
+    }
+  };
+
   const onPointerUpHandler = (e) => {
     const pointerMovedDistance = getPointerMovedDistance(e);
 
     if (isPointerMovedMoreThanTriggerPx(pointerMovedDistance)) {
-      setRealTimePointerRefOnPointerUp(e);
+      setRealTimePointerRefOnMove(e);
     } else {
       setRealTimePointerRef({ move: false });
     }
     console.log(realTimePointerRef.current);
+    doTransition();
+
     e.target.releasePointerCapture(e.pointerId);
   };
 
   return (
     <div
       className="swiper__container"
-      onPointerMove={onPointerMoveHandler}
       onPointerDown={onPointerDownHandler}
       onPointerUp={onPointerUpHandler}
-      
+      ref={containerRef}
     >
       <div
         className="swiper__mover"
-        style={{
-          transform: `translateX(${state.translateX}%)`,
-        }}
+        style={{ transform: `translateX(${state.translateX}px)` }}
       >
         {children}
       </div>
