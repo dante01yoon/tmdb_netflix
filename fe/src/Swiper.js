@@ -170,6 +170,7 @@ const Swiper = ({ children }) => {
     }
     return false;
   };
+
   useEffect(() => {
     console.log("currentPage: ", state.pagenation.currentPage);
   }, [state]);
@@ -187,28 +188,39 @@ const Swiper = ({ children }) => {
       return updatedContentsCount;
     }
     const { cardExposedInRow } = windowState;
-    const { contentsCount } = state.pagenation;
     return updatedContentsCount - (totalPage - 1) * cardExposedInRow;
   };
 
+  const isPrevPageFirstPage = () => {
+    if(currentPage === 1){
+      return true;
+    }
+    return false;
+  }
+  
   const getTransitionMove = () => {
     const { cardPadding, cardExposedInRow } = windowState;
+    const currentTranslateX = state.translateX;
     const singleCardWidthPx =
       (containerRef?.current.offsetWidth - cardPadding * 2) / cardExposedInRow;
     const defaultDistanceToMove = singleCardWidthPx * cardExposedInRow;
-
-    if (isNextPageLastPage()) {
-      console.log("isNextPageLastPage");
-      console.log("getLastPageCardCount: ", getLastPageCardCount());
-      const cardCountToFillExposedInRow =
+    const cardCountToFillExposedInRow =
         cardExposedInRow - getLastPageCardCount();
-      console.log("cardExposedInRow: ", cardCountToFillExposedInRow);
+
+    if( realTimePointerRef.current.direction === DIRECTION.LEFT) {
+      if (isNextPageLastPage()) {
+        return (
+          currentTranslateX - (defaultDistanceToMove - cardCountToFillExposedInRow * singleCardWidthPx) 
+        );
+      }
+      return currentTranslateX - defaultDistanceToMove;
+    }
+    if(isPrevPageFirstPage()){
       return (
-        defaultDistanceToMove - cardCountToFillExposedInRow * singleCardWidthPx
+        currentTranslateX + defaultDistanceToMove - cardCountToFillExposedInRow * singleCardWidthPx
       );
     }
-    console.log(defaultDistanceToMove);
-    return defaultDistanceToMove;
+    return currentTranslateX + defaultDistanceToMove;
   };
 
   const doTransition = () => {
@@ -222,17 +234,15 @@ const Swiper = ({ children }) => {
             currentPage: state.pagenation.currentPage + 1,
           })
         );
-        dispatch(translateActionCreator(-transitionMove));
+        dispatch(translateActionCreator(transitionMove));
       } else if (isMoveToRight()) {
-        console.log("before dispatch: ", state.pagenation);
-        console.log("after dispatch: ", state.pagenation);
         dispatch(
           pagenationActionCreator({
             ...state.pagenation,
             currentPage: state.pagenation.currentPage - 1,
           })
         );
-        dispatch(translateActionCreator(-transitionMove * currentPage));
+        dispatch(translateActionCreator(transitionMove));
       }
     }
   };
