@@ -36,6 +36,7 @@ const searchApiFactory = ({state, setState}) => {
       search: searchValue
     }))
   }
+  const history = state.history; 
   const setHistory = () => {
     setState(prevState => ({
       ...prevState,
@@ -46,8 +47,19 @@ const searchApiFactory = ({state, setState}) => {
   return {
     search, 
     setSearch,
+    history,
     setHistory, 
   }
 }
 
-export default searchApiFactory;
+const initialState = {
+  search: "", 
+  history: [], 
+  setSearch: () => {}, 
+  setHistory: () => {}, 
+}
+
+export {
+  searchApiFactory, 
+  initialState 
+}
