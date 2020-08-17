@@ -1,11 +1,10 @@
-
-.nav__container{
-  box-sizing:border-box;
+.nav__container {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   position: fixed;
-  top: 0; 
-  z-index:5;
+  top: 0;
+  z-index: 5;
   width: 100%;
   height: 48px;
   padding: 8px 32px;
@@ -14,30 +13,35 @@
   transition-timing-function: ease-in;
   transition: all 0.5s;
 }
-.nav__black{
+.nav__black {
   background-color: rgb(20, 20, 20);
 }
-.nav__logo{
+.nav__logo {
   width: 120px;
   height: 100%;
 }
 
 .nav__list {
-  display:table-cell;
-  height:100%;
+  display: table-cell;
+  height: 100%;
 }
 
 .nav__list__item {
   vertical-align: middle;
-  cursor:pointer;
+  cursor: pointer;
   display: inline-block;
   margin-right: 8px;
   font-weight: 500;
 }
-.nav__list__item .nav__search__box{
+.nav__list__item .nav__search__box {
   margin-top: 5px;
 }
-.nav__list__item .nav__search__img{
-  width: 20px;
-  height: 20px;
+.nav__list__item .nav__search__button {
+  background-color: transparent;
+  border: none;
+  transition: all 0.4s ease;
+}
+.nav__list__item .nav__search__img {
+  width: 18px;
+  height: 18px;
 }
