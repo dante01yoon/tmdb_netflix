@@ -19,7 +19,6 @@ const DIRECTION = {
 };
 
 const SwiperRow = ({ title, fetchUrl }) => {
-  const [childrenCount, setChildrenCount ] = useState(0); 
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState("");
 
@@ -70,10 +69,10 @@ const SwiperRow = ({ title, fetchUrl }) => {
     move: false,
     pagenation: {
       contentsCount: 0,
-      currentPage: 0
+      currentPage: 0,
     },
   };
-  
+
   const reducer = (state, { type, payload }) => {
     switch (type) {
       case SLIDING_DIRECTION:

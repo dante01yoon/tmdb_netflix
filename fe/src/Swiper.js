@@ -67,11 +67,8 @@ const Swiper = ({ children }) => {
         contentsCount,
       })
     );
+    console.log("contentsCount: ", contentsCount);
   }, [contentsCount]);
-
-  useEffect(() => {
-    console.log("state: ", state);
-  }, [state]);
 
   const setRealTimePointerRef = ({
     direction = realTimePointerRef.current.direction,
@@ -122,25 +119,6 @@ const Swiper = ({ children }) => {
     }
     return false;
   };
-  const isCurrentPageLastPage = () => {
-    if (currentPage === totalPage) {
-      return true;
-    }
-    return false;
-  };
-  const isNextPageLastPage = () => {
-    if (currentPage + 1 === totalPage) {
-      return true;
-    }
-    return false;
-  };
-
-  const isMoveToRight = () => {
-    if (realTimePointerRef.current.direction === DIRECTION.RIGHT) {
-      return !isCurrentPageFirstPage();
-    }
-    return false;
-  };
 
   // pagenation은 0 부터 시작
   const isNumberIsNatural = (number) => {
@@ -164,16 +142,32 @@ const Swiper = ({ children }) => {
 
   const totalPage = getTotalPageIndex();
 
+  const isCurrentPageLastPage = () => {
+    if (currentPage === totalPage) {
+      return true;
+    }
+    return false;
+  };
+  const isNextPageLastPage = () => {
+    if (currentPage + 1 === totalPage) {
+      return true;
+    }
+    return false;
+  };
+
+  const isMoveToRight = () => {
+    if (realTimePointerRef.current.direction === DIRECTION.RIGHT) {
+      return !isCurrentPageFirstPage();
+    }
+    return false;
+  };
+
   const isMoveToLeft = () => {
     if (realTimePointerRef.current.direction === DIRECTION.LEFT) {
       return !isCurrentPageLastPage();
     }
     return false;
   };
-
-  useEffect(() => {
-    console.log("currentPage: ", state.pagenation.currentPage);
-  }, [state]);
 
   const isSinglePage = () => {
     if (!totalPage) {
@@ -188,36 +182,43 @@ const Swiper = ({ children }) => {
       return updatedContentsCount;
     }
     const { cardExposedInRow } = windowState;
-    return updatedContentsCount - (totalPage - 1) * cardExposedInRow;
+    return updatedContentsCount - totalPage * cardExposedInRow;
   };
 
   const isPrevPageFirstPage = () => {
-    if(currentPage === 1){
+    if (currentPage === 1) {
       return true;
     }
     return false;
-  }
-  
+  };
+
   const getTransitionMove = () => {
     const { cardPadding, cardExposedInRow } = windowState;
     const currentTranslateX = state.translateX;
     const singleCardWidthPx =
       (containerRef?.current.offsetWidth - cardPadding * 2) / cardExposedInRow;
-    const defaultDistanceToMove = singleCardWidthPx * cardExposedInRow;
-    const cardCountToFillExposedInRow =
-        cardExposedInRow - getLastPageCardCount();
+    const defaultDistanceToMove =
+      containerRef?.current.offsetWidth - cardPadding * 2;
+    console.log("containerRef: ", containerRef?.current.offsetWidth);
+    console.log("cardPadding: ", windowState.cardPadding);
 
-    if( realTimePointerRef.current.direction === DIRECTION.LEFT) {
+    const cardCountToFillExposedInRow =
+      cardExposedInRow - getLastPageCardCount();
+    if (realTimePointerRef.current.direction === DIRECTION.LEFT) {
       if (isNextPageLastPage()) {
         return (
-          currentTranslateX - (defaultDistanceToMove - cardCountToFillExposedInRow * singleCardWidthPx) 
+          currentTranslateX -
+          (defaultDistanceToMove -
+            cardCountToFillExposedInRow * singleCardWidthPx)
         );
       }
       return currentTranslateX - defaultDistanceToMove;
     }
-    if(isPrevPageFirstPage()){
+    if (isPrevPageFirstPage()) {
       return (
-        currentTranslateX + defaultDistanceToMove - cardCountToFillExposedInRow * singleCardWidthPx
+        currentTranslateX +
+        defaultDistanceToMove -
+        cardCountToFillExposedInRow * singleCardWidthPx
       );
     }
     return currentTranslateX + defaultDistanceToMove;
@@ -225,7 +226,6 @@ const Swiper = ({ children }) => {
 
   const doTransition = () => {
     const transitionMove = getTransitionMove();
-    console.log("transitionMove: ", transitionMove);
     if (realTimePointerRef.current.move) {
       if (isMoveToLeft()) {
         dispatch(
@@ -255,7 +255,6 @@ const Swiper = ({ children }) => {
     } else {
       setRealTimePointerRef({ move: false });
     }
-    console.log(realTimePointerRef.current);
     doTransition();
 
     e.target.releasePointerCapture(e.pointerId);

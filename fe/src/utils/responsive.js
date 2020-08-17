@@ -56,9 +56,9 @@ export const getWindowCardPadding = (breakpoint) => {
 
 const WINDOW_CARD_WIDTH = {
   s499: 49,
-  s799: 32.6,
-  s1099: 24.35,
-  s1399: 19.45,
+  s799: 32.5,
+  s1099: 24.21,
+  s1399: 19.35,
   l1400: 16.17,
 };
 
@@ -110,9 +110,7 @@ const useResponsiveLayout = () => {
       return WINDOW_BREAKPOINT.l1400;
     }
   };
-
-  const resizeHandler = (e) => {
-    console.log("resizing...");
+  const handleSetState = () => {
     const currentBreakPoint = getWindowBreakpoint();
     const cardExposedInRow = getWindowCardCount(currentBreakPoint);
     const cardPadding = getWindowCardPadding(currentBreakPoint);
@@ -127,8 +125,13 @@ const useResponsiveLayout = () => {
     };
     setState(currentWindowValue);
   };
+  const resizeHandler = (e) => {
+    console.log("resizing...");
+    handleSetState();
+  };
 
   useLayoutEffect(() => {
+    handleSetState();
     if (window) {
       window.addEventListener("resize", resizeHandler);
 
