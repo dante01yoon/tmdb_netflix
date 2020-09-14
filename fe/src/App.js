@@ -1,17 +1,29 @@
-import React from "react";
-import requests from "./request";
-
+import React, { useEffect, useState } from "react";
 import Banner from "./Banner";
 import Nav from "./Nav";
 import SwiperRow from "./SwiperRow";
+import SingleSlider from "./components/SingleSlider";
 import Row from "./Row";
 import "./App.css";
+import instance from "./axios";
+import requests from "./request";
 
 function App() {
+  const [movies, setMovies] = useState([]);
+  useEffect(() => {
+    new Promise((resolve) => {
+      resolve(
+        instance.request({ method: "GET", url: requests.fetchNetflixOriginals })
+      );
+    }).then((response) => {
+      setMovies(response.data.results);
+    });
+  }, []);
   return (
     <div className="App">
       <Nav />
       <Banner />
+      <SingleSlider data={movies} />
       <SwiperRow
         title="NETFLIX ORIGINALS"
         fetchUrl={requests.fetchNetflixOriginals}
